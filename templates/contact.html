@@ -1,0 +1,252 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us - Kerala Krishi AI{% endblock %}
+
+{% block content %}
+<section class="contact-section py-5 mt-5">
+    <div class="container">
+        <!-- Header -->
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <h2 class="display-4 text-success mb-4">Contact Us</h2>
+                <p class="lead text-muted">
+                    Get in touch with our agricultural support team
+                </p>
+            </div>
+        </div>
+
+        <div class="row g-5">
+            <!-- Contact Information -->
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <h5 class="text-success mb-4">
+                            <i class="fas fa-info-circle me-2"></i>Contact Information
+                        </h5>
+                        
+                        <div class="contact-item mb-4">
+                            <div class="d-flex align-items-center">
+                                <div class="contact-icon bg-success text-white rounded-circle p-2 me-3">
+                                    <i class="fas fa-building"></i>
+                                </div>
+                                <div>
+                                    <strong>Department</strong><br>
+                                    <span class="text-muted">Department of Agriculture<br>Government of Kerala</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="contact-item mb-4">
+                            <div class="d-flex align-items-center">
+                                <div class="contact-icon bg-success text-white rounded-circle p-2 me-3">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <strong>Email Support</strong><br>
+                                    <a href="mailto:support@keralakrishiai.gov.in" class="text-success">support@keralakrishiai.gov.in</a><br>
+                                    <a href="mailto:tech@keralakrishiai.gov.in" class="text-success">tech@keralakrishiai.gov.in</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="contact-item mb-4">
+                            <div class="d-flex align-items-center">
+                                <div class="contact-icon bg-success text-white rounded-circle p-2 me-3">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <div>
+                                    <strong>Helpline Numbers</strong><br>
+                                    <span class="text-muted">
+                                        Toll Free: 1800-XXX-XXXX<br>
+                                        Technical Support: +91-XXX-XXXX-XXX
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="contact-item mb-4">
+                            <div class="d-flex align-items-center">
+                                <div class="contact-icon bg-success text-white rounded-circle p-2 me-3">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div>
+                                    <strong>Support Hours</strong><br>
+                                    <span class="text-muted">
+                                        Monday - Friday: 9:00 AM - 6:00 PM<br>
+                                        AI System: 24/7 Available
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-5">
+                        <h5 class="text-success mb-4">
+                            <i class="fas fa-paper-plane me-2"></i>Send us a Message
+                        </h5>
+
+                        <form method="POST" id="contactForm">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="name" class="form-label">
+                                        <i class="fas fa-user me-2"></i>Full Name <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control" id="name" name="name" required>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label">
+                                        <i class="fas fa-envelope me-2"></i>Email Address <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="email" class="form-control" id="email" name="email" required>
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mt-1">
+                                <div class="col-md-6">
+                                    <label for="phone" class="form-label">
+                                        <i class="fas fa-phone me-2"></i>Phone Number
+                                    </label>
+                                    <input type="tel" class="form-control" id="phone" name="phone" pattern="[6-9][0-9]{9}">
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="district" class="form-label">
+                                        <i class="fas fa-map-marker-alt me-2"></i>District
+                                    </label>
+                                    <select class="form-select" id="district" name="district">
+                                        <option value="">Select District</option>
+                                        <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+                                        <option value="Kollam">Kollam</option>
+                                        <option value="Alappuzha">Alappuzha</option>
+                                        <option value="Pathanamthitta">Pathanamthitta</option>
+                                        <option value="Kottayam">Kottayam</option>
+                                        <option value="Idukki">Idukki</option>
+                                        <option value="Ernakulam">Ernakulam</option>
+                                        <option value="Thrissur">Thrissur</option>
+                                        <option value="Palakkad">Palakkad</option>
+                                        <option value="Malappuram">Malappuram</option>
+                                        <option value="Kozhikode">Kozhikode</option>
+                                        <option value="Wayanad">Wayanad</option>
+                                        <option value="Kannur">Kannur</option>
+                                        <option value="Kasaragod">Kasaragod</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mt-1">
+                                <div class="col-12">
+                                    <label for="subject" class="form-label">
+                                        <i class="fas fa-tag me-2"></i>Subject <span class="text-danger">*</span>
+                                    </label>
+                                    <select class="form-select" id="subject" name="subject" required>
+                                        <option value="">Select Subject</option>
+                                        <option value="Technical Support">Technical Support</option>
+                                        <option value="Account Issues">Account Issues</option>
+                                        <option value="AI Response Issues">AI Response Issues</option>
+                                        <option value="Feature Request">Feature Request</option>
+                                        <option value="Bug Report">Bug Report</option>
+                                        <option value="General Inquiry">General Inquiry</option>
+                                        <option value="Feedback">Feedback</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mt-1">
+                                <div class="col-12">
+                                    <label for="message" class="form-label">
+                                        <i class="fas fa-comment-dots me-2"></i>Message <span class="text-danger">*</span>
+                                    </label>
+                                    <textarea class="form-control" id="message" name="message" rows="5" 
+                                             placeholder="Please describe your inquiry or issue in detail..." required></textarea>
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mt-1">
+                                <div class="col-12">
+                                    <label for="language" class="form-label">
+                                        <i class="fas fa-language me-2"></i>Preferred Response Language
+                                    </label>
+                                    <div class="btn-group w-100" role="group">
+                                        <input type="radio" class="btn-check" name="language" id="lang_ml" value="ml" checked>
+                                        <label class="btn btn-outline-success" for="lang_ml">മലയാളം</label>
+                                        
+                                        <input type="radio" class="btn-check" name="language" id="lang_en" value="en">
+                                        <label class="btn btn-outline-success" for="lang_en">English</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-center mt-4">
+                                <button type="submit" class="btn btn-success btn-lg px-5">
+                                    <i class="fas fa-paper-plane me-2"></i>Send Message
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card bg-light border-0">
+                    <div class="card-body p-5">
+                        <h3 class="text-center text-success mb-4">Frequently Asked Questions</h3>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <h6><i class="fas fa-question-circle text-success me-2"></i>How do I register as a farmer?</h6>
+                                <p class="text-muted small">
+                                    Click on the "Register" button and fill out the form with your basic information. 
+                                    You'll need a valid mobile number for verification.
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6><i class="fas fa-question-circle text-success me-2"></i>Is the AI service really free?</h6>
+                                <p class="text-muted small">
+                                    Yes, Kerala Krishi AI is completely free for all registered farmers. 
+                                    This is a government initiative to support agriculture.
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6><i class="fas fa-question-circle text-success me-2"></i>Can I ask questions in Malayalam?</h6>
+                                <p class="text-muted small">
+                                    Absolutely! Our AI system supports Malayalam language queries. 
+                                    You can type, speak, or upload images with Malayalam descriptions.
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6><i class="fas fa-question-circle text-success me-2"></i>What if the AI can't answer my question?</h6>
+                                <p class="text-muted small">
+                                    Complex queries are automatically escalated to our expert agricultural officers 
+                                    who will provide personalized guidance.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Show success message (in real implementation, this would send the form data)
+    KrishiAI.showNotification('Thank you for your message! We will get back to you within 24 hours.', 'success');
+    
+    // Reset form
+    this.reset();
+});
+</script>
+{% endblock %}

@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block title %}Register - Kerala Krishi AI{% endblock %}
+
+{% block content %}
+<section class="auth-section py-5 mt-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-7">
+                <div class="card shadow-lg border-0 rounded-4">
+                    <div class="card-header bg-success text-white text-center rounded-top-4 py-4">
+                        <i class="fas fa-user-plus fa-3x mb-3"></i>
+                        <h3 class="mb-0">Farmer Registration</h3>
+                        <p class="mb-0">Join the AI-powered farming community</p>
+                    </div>
+                    
+                    <div class="card-body p-5">
+                        <form method="POST">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="full_name" class="form-label">
+                                        <i class="fas fa-user me-2"></i>Full Name <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control" id="full_name" name="full_name" required>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="username" class="form-label">
+                                        <i class="fas fa-at me-2"></i>Username <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control" id="username" name="username" required>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="phone" class="form-label">
+                                        <i class="fas fa-phone me-2"></i>Mobile Number <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="tel" class="form-control" id="phone" name="phone" pattern="[6-9][0-9]{9}" required>
+                                    <small class="form-text text-muted">Enter 10-digit mobile number</small>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label">
+                                        <i class="fas fa-envelope me-2"></i>Email (Optional)
+                                    </label>
+                                    <input type="email" class="form-control" id="email" name="email">
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="password" class="form-label">
+                                        <i class="fas fa-lock me-2"></i>Password <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="password" name="password" minlength="6" required>
+                                        <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('password')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    <small class="form-text text-muted">Minimum 6 characters</small>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="confirm_password" class="form-label">
+                                        <i class="fas fa-lock me-2"></i>Confirm Password <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                                        <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('confirm_password')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="preferred_language" class="form-label">
+                                    <i class="fas fa-language me-2"></i>Preferred Language
+                                </label>
+                                <select class="form-select" id="preferred_language" name="preferred_language">
+                                    <option value="ml" selected>മലയാളം (Malayalam)</option>
+                                    <option value="en">English</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="terms" required>
+                                    <label class="form-check-label" for="terms">
+                                        I agree to the <a href="#" class="text-success">Terms and Conditions</a> and 
+                                        <a href="#" class="text-success">Privacy Policy</a>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-success btn-lg w-100 mb-3">
+                                <i class="fas fa-user-plus me-2"></i>Create Account
+                            </button>
+                        </form>
+                        
+                        <div class="text-center">
+                            <p class="mb-0">
+                                Already have an account? 
+                                <a href="{{ url_for('auth.login') }}" class="text-success fw-bold text-decoration-none">
+                                    Login here
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Registration Benefits -->
+                <div class="row mt-4 g-3">
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <i class="fas fa-robot fa-2x text-success mb-2"></i>
+                            <h6>AI Support</h6>
+                            <small>24/7 AI assistance in Malayalam</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <i class="fas fa-users fa-2x text-success mb-2"></i>
+                            <h6>Expert Connect</h6>
+                            <small>Direct access to agricultural experts</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <i class="fas fa-chart-line fa-2x text-success mb-2"></i>
+                            <h6>Track Progress</h6>
+                            <small>Monitor your farming journey</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function togglePassword(fieldId) {
+    const field = document.getElementById(fieldId);
+    const button = field.nextElementSibling.querySelector('i');
+    
+    if (field.type === 'password') {
+        field.type = 'text';
+        button.classList.remove('fa-eye');
+        button.classList.add('fa-eye-slash');
+    } else {
+        field.type = 'password';
+        button.classList.remove('fa-eye-slash');
+        button.classList.add('fa-eye');
+    }
+}
+
+// Password confirmation validation with visual feedback
+function validatePasswordMatch() {
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm_password').value;
+    const confirmPasswordField = document.getElementById('confirm_password');
+    const feedbackElement = document.getElementById('password_match_feedback');
+    const successElement = document.getElementById('password_match_success');
+    
+    if (confirmPassword.length === 0) {
+        // Reset styling when field is empty
+        confirmPasswordField.classList.remove('is-valid', 'is-invalid');
+        feedbackElement.style.display = 'none';
+        successElement.style.display = 'none';
+        confirmPasswordField.setCustomValidity('');
+        return;
+    }
+    
+    if (password !== confirmPassword) {
+        // Show red styling and error message
+        confirmPasswordField.classList.remove('is-valid');
+        confirmPasswordField.classList.add('is-invalid');
+        feedbackElement.style.display = 'block';
+        successElement.style.display = 'none';
+        confirmPasswordField.setCustomValidity('Passwords do not match');
+    } else {
+        // Show green styling and success message
+        confirmPasswordField.classList.remove('is-invalid');
+        confirmPasswordField.classList.add('is-valid');
+        feedbackElement.style.display = 'none';
+        successElement.style.display = 'block';
+        confirmPasswordField.setCustomValidity('');
+    }
+}
+
+// Add event listeners for both password fields
+document.getElementById('password').addEventListener('input', validatePasswordMatch);
+document.getElementById('confirm_password').addEventListener('input', validatePasswordMatch);
+</script>
+{% endblock %}

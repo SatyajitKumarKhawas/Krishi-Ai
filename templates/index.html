@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+
+{% block title %}Kerala Krishi AI - Digital Agricultural Assistant{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section bg-success text-white">
+    <div class="container">
+        <div class="row align-items-center min-vh-100 py-5">
+            <div class="col-lg-6">
+                <div class="hero-content">
+                    <p class="text-light mb-2">🌾 We are Providing Natural Products</p>
+                    <h1 class="display-4 fw-bold mb-4">Organic Farming and Agriculture</h1>
+                    <p class="lead mb-4">
+                        A successful middle-sized farm may generate gross revenue in 
+                        the range of $500,000 to $5 million annually, depending on the 
+                        scale and type of operations.
+                    </p>
+                    <div class="hero-buttons">
+                        {% if current_user.is_authenticated %}
+                            <a href="{{ url_for('query.ask_query') }}" class="btn btn-warning btn-lg me-3">
+                                <i class="fas fa-question-circle me-2"></i>Ask Your Query
+                            </a>
+                            <a href="{{ url_for('dashboard.profile') }}" class="btn btn-outline-light btn-lg">
+                                <i class="fas fa-user me-2"></i>My Dashboard
+                            </a>
+                        {% else %}
+                            <a href="{{ url_for('auth.register') }}" class="btn btn-warning btn-lg me-3">
+                                <i class="fas fa-user-plus me-2"></i>Get Started Now
+                            </a>
+                            <a href="{{ url_for('about') }}" class="btn btn-outline-light btn-lg">
+                                <i class="fas fa-info-circle me-2"></i>See All Service
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hero-image text-center">
+                    <i class="fas fa-tractor fa-10x text-warning opacity-75"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section bg-warning py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-users fa-3x text-success"></i>
+                    </div>
+                    <h5 class="fw-bold">100K+ Client With Positive Reviews</h5>
+                    <p>Our AI system has helped thousands of farmers across Kerala</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon mb-3">
+                        <img src="https://via.placeholder.com/80x80/28a745/ffffff?text=AI" alt="AI Support" class="rounded-circle">
+                    </div>
+                    <h5 class="fw-bold">AI-Powered Support</h5>
+                    <p>Get instant answers to your farming questions in Malayalam</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card text-center">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-leaf fa-3x text-success"></i>
+                    </div>
+                    <h5 class="fw-bold">Healthy Life With Fresh Products</h5>
+                    <p>Expert guidance for organic and sustainable farming practices</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section class="services-section py-5">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <h2 class="display-5 fw-bold text-success mb-4">We Offer Eco & Agriculture Services</h2>
+                <div class="d-flex justify-content-center gap-3 mb-4">
+                    <button class="btn btn-success">Our Services</button>
+                    <button class="btn btn-outline-success">Our Services</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="service-card bg-success text-white rounded-4 p-4 h-100">
+                    <div class="service-image mb-3">
+                        <i class="fas fa-microscope fa-4x text-warning"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Agricultural Consulting</h5>
+                    <p class="mb-4">Get personalized advice on crop selection, pest management, and farming techniques</p>
+                    <span class="badge bg-warning text-dark">Agricultural Consulting</span>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="service-card bg-success text-white rounded-4 p-4 h-100">
+                    <div class="service-image mb-3">
+                        <i class="fas fa-seedling fa-4x text-warning"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Soil Fertilization</h5>
+                    <p class="mb-4">Comprehensive soil testing and improvement strategies for growth</p>
+                    <span class="badge bg-warning text-dark">Soil Enhancement</span>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="service-card bg-success text-white rounded-4 p-4 h-100">
+                    <div class="service-image mb-3">
+                        <i class="fas fa-cow fa-4x text-warning"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Dairy Production</h5>
+                    <p class="mb-4">Direct delivery of fresh, farm-grown produce straight to your doorstep</p>
+                    <span class="badge bg-warning text-dark">Animal Husbandry</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How it Works Section -->
+<section class="how-it-works-section bg-light py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h2 class="display-5 fw-bold text-success">How Our AI Assistant Works</h2>
+                <p class="lead">Simple steps to get expert farming advice</p>
+            </div>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-3 text-center">
+                <div class="step-card">
+                    <div class="step-number bg-success text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <strong>1</strong>
+                    </div>
+                    <h5>Register Account</h5>
+                    <p>Create your farmer profile with basic information</p>
+                </div>
+            </div>
+            <div class="col-md-3 text-center">
+                <div class="step-card">
+                    <div class="step-number bg-success text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <strong>2</strong>
+                    </div>
+                    <h5>Ask Your Question</h5>
+                    <p>Type or speak your query in Malayalam or English</p>
+                </div>
+            </div>
+            <div class="col-md-3 text-center">
+                <div class="step-card">
+                    <div class="step-number bg-success text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <strong>3</strong>
+                    </div>
+                    <h5>Get AI Response</h5>
+                    <p>Receive instant expert advice from our AI system</p>
+                </div>
+            </div>
+            <div class="col-md-3 text-center">
+                <div class="step-card">
+                    <div class="step-number bg-success text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <strong>4</strong>
+                    </div>
+                    <h5>Expert Follow-up</h5>
+                    <p>Get human expert assistance if needed</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+{% if not current_user.is_authenticated %}
+<section class="cta-section bg-success text-white py-5">
+    <div class="container text-center">
+        <h2 class="display-5 fw-bold mb-4">Ready to Transform Your Farming?</h2>
+        <p class="lead mb-4">Join thousands of Kerala farmers who are already benefiting from AI-powered agricultural support</p>
+        <a href="{{ url_for('auth.register') }}" class="btn btn-warning btn-lg">
+            <i class="fas fa-rocket me-2"></i>Get Started Today
+        </a>
+    </div>
+</section>
+{% endif %}
+{% endblock %}

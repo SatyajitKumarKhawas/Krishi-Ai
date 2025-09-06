@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile - Kerala Krishi AI{% endblock %}
+
+{% block content %}
+<section class="dashboard-section py-5 mt-5">
+    <div class="container">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h2 class="text-success mb-1">
+                            <i class="fas fa-user-circle me-2"></i>Welcome, {{ user.full_name }}!
+                        </h2>
+                        <p class="text-muted mb-0">
+                            <i class="fas fa-calendar me-1"></i>Last login: 
+                            {% if user.last_login %}
+                                {{ user.last_login.strftime('%d %b %Y at %I:%M %p') }}
+                            {% else %}
+                                First time login
+                            {% endif %}
+                        </p>
+                    </div>
+                    <a href="{{ url_for('dashboard.edit_profile') }}" class="btn btn-success">
+                        <i class="fas fa-edit me-2"></i>Edit Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Profile Completion Card -->
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-success">
+                            <i class="fas fa-chart-pie me-2"></i>Profile Completion
+                        </h5>
+                        <div class="mb-3">
+                            <div class="progress" style="height: 20px;">
+                                <div class="progress-bar bg-success" role="progressbar" 
+                                     style="width: {{ user.get_profile_completion() }}%" 
+                                     aria-valuenow="{{ user.get_profile_completion() }}" 
+                                     aria-valuemin="0" aria-valuemax="100">
+                                    {{ user.get_profile_completion() }}%
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-muted">Complete your profile to get better AI recommendations</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Query Statistics -->
+            <div class="col-md-8">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title text-success mb-4">
+                            <i class="fas fa-chart-bar me-2"></i>Query Statistics
+                        </h5>
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <div class="stat-card bg-primary text-white rounded p-3 text-center">
+                                    <i class="fas fa-question-circle fa-2x mb-2"></i>
+                                    <h4 class="mb-1">{{ stats.total_queries }}</h4>
+                                    <small>Total Queries</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card bg-success text-white rounded p-3 text-center">
+                                    <i class="fas fa-check-circle fa-2x mb-2"></i>
+                                    <h4 class="mb-1">{{ stats.answered_queries }}</h4>
+                                    <small>Answered</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card bg-warning text-white rounded p-3 text-center">
+                                    <i class="fas fa-clock fa-2x mb-2"></i>
+                                    <h4 class="mb-1">{{ stats.pending_queries }}</h4>
+                                    <small>Pending</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card bg-info text-white rounded p-3 text-center">
+                                    <i class="fas fa-percentage fa-2x mb-2"></i>
+                                    <h4 class="mb-1">{{ stats.success_rate }}%</h4>
+                                    <small>Success Rate</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mt-1">
+            <!-- User Information -->
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-user me-2"></i>Personal Information
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                <strong class="text-dark">Full Name:</strong><br>
+                                <span class="text-muted">{{ user.full_name }}</span>
+                            </div>
+                            <div class="col-sm-6">
+                                <strong class="text-dark">Username:</strong><br>
+                                <span class="text-muted">{{ user.username }}</span>
+                            </div>
+                            <div class="col-sm-6">
+                                <strong class="text-dark">Phone:</strong><br>
+                                <span class="text-muted">{{ user.phone }}</span>
+                            </div>
+                            <div class="col-sm-6">
+                                <strong class="text-dark">Email:</strong><br>
+                                <span class="text-muted">{{ user.email or 'Not provided' }}</span>
+                            </div>
+                            <div class="col-sm-6">
+                                <strong class="text-dark">Age:</strong><br>
+                                <span class="text-muted">{{ user.age or 'Not provided' }}</span>
+                            </div>
+                            <div class="col-sm-6">
+                                <strong class="text-dark">Language:</strong><br>
+                                <span class="text-muted">
+                                    {% if user.preferred_language == 'ml' %}മലയാളം{% else %}English{% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Farming Information -->
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-seedling me-2"></i>Farming Information
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                <strong class="text-dark">District:</strong><br>
+                                <span class="text-muted">{{ user.district or 'Not provided' }}</span>
+                            </div>
+                            <div class="col-sm-6">
+                                <strong class="text-dark">Village:</strong><br>
+                                <span class="text-muted">{{ user.village or 'Not provided' }}</span>
+                            </div>
+                            <div class="col-sm-6">
+                                <strong class="text-dark">Farm Size:</strong><br>
+                                <span class="text-muted">
+                                    {% if user.farm_size %}{{ user.farm_size }} acres{% else %}Not provided{% endif %}
+                                </span>
+                            </div>
+                            <div class="col-sm-6">
+                                <strong class="text-dark">Experience:</strong><br>
+                                <span class="text-muted">
+                                    {% if user.farming_experience %}{{ user.farming_experience }} years{% else %}Not provided{% endif %}
+                                </span>
+                            </div>
+                            <div class="col-12">
+                                <strong class="text-dark">Farm Type:</strong><br>
+                                <span class="text-muted">{{ user.farm_type or 'Not provided' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Queries -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="fas fa-history me-2"></i>Recent Queries
+                        </h5>
+                        <a href="{{ url_for('dashboard.my_queries') }}" class="btn btn-light btn-sm">
+                            <i class="fas fa-list me-1"></i>View All
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        {% if recent_queries %}
+                            {% for query in recent_queries %}
+                            <div class="query-item border-bottom pb-3 mb-3">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-1 text-dark">{{ query.query_text[:100] }}{% if query.query_text|length > 100 %}...{% endif %}</h6>
+                                        <div class="d-flex gap-2 mb-2">
+                                            <span class="badge bg-{{ 'success' if query.status == 'answered' else 'warning' if query.status == 'pending' else 'info' }}">
+                                                {{ query.status.title() }}
+                                            </span>
+                                            {% if query.crop_type %}
+                                            <span class="badge bg-secondary">{{ query.crop_type }}</span>
+                                            {% endif %}
+                                        </div>
+                                        <small class="text-muted">
+                                            <i class="fas fa-calendar me-1"></i>{{ query.created_at.strftime('%d %b %Y at %I:%M %p') }}
+                                        </small>
+                                    </div>
+                                    <a href="{{ url_for('dashboard.view_query', query_id=query.id) }}" class="btn btn-outline-success btn-sm">
+                                        <i class="fas fa-eye me-1"></i>View
+                                    </a>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="text-center py-4">
+                                <i class="fas fa-question-circle fa-3x text-muted mb-3"></i>
+                                <h5 class="text-muted">No queries yet</h5>
+                                <p class="text-muted">Start by asking your first farming question!</p>
+                                <a href="{{ url_for('query.ask_query') }}" class="btn btn-success">
+                                    <i class="fas fa-plus me-2"></i>Ask Your First Query
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,287 @@
+{% extends "base.html" %}
+
+{% block title %}Ask Query - Kerala Krishi AI{% endblock %}
+
+{% block content %}
+<section class="query-section py-5 mt-5">
+    <div class="container">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <h2 class="text-success mb-3">
+                    <i class="fas fa-question-circle me-2"></i>Ask Your Farming Question
+                </h2>
+                <p class="lead text-muted">
+                    Get instant AI-powered agricultural advice in Malayalam or English
+                </p>
+            </div>
+        </div>
+
+        <!-- Query Form -->
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-lg">
+                    <div class="card-header bg-success text-white text-center py-4">
+                        <h4 class="mb-0">
+                            <i class="fas fa-seedling me-2"></i>Submit Your Query
+                        </h4>
+                    </div>
+                    
+                    <div class="card-body p-5">
+                        <form method="POST" enctype="multipart/form-data" id="queryForm">
+                            <!-- Query Type Selection -->
+                            <div class="mb-4">
+                                <label class="form-label text-dark">
+                                    <i class="fas fa-list me-2"></i>How would you like to ask your question?
+                                </label>
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <div class="form-check query-type-card">
+                                            <input class="form-check-input" type="radio" name="query_type" id="type_text" value="text" checked>
+                                            <label class="form-check-label w-100 text-center p-3 border rounded" for="type_text">
+                                                <i class="fas fa-keyboard fa-2x text-success mb-2 d-block"></i>
+                                                <strong class="text-dark">Type Text</strong><br>
+                                                <small class="text-muted">Write your question</small>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-check query-type-card">
+                                            <input class="form-check-input" type="radio" name="query_type" id="type_voice" value="voice">
+                                            <label class="form-check-label w-100 text-center p-3 border rounded" for="type_voice">
+                                                <i class="fas fa-microphone fa-2x text-success mb-2 d-block"></i>
+                                                <strong class="text-dark">Voice Input</strong><br>
+                                                <small class="text-muted">Record your question</small>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-check query-type-card">
+                                            <input class="form-check-input" type="radio" name="query_type" id="type_image" value="image">
+                                            <label class="form-check-label w-100 text-center p-3 border rounded" for="type_image">
+                                                <i class="fas fa-camera fa-2x text-success mb-2 d-block"></i>
+                                                <strong class="text-dark">Upload Image</strong><br>
+                                                <small class="text-muted">Show crop photos</small>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Main Query Text -->
+                            <div class="mb-4">
+                                <label for="query_text" class="form-label text-dark">
+                                    <i class="fas fa-comment-dots me-2"></i>Your Question <span class="text-danger">*</span>
+                                </label>
+                                <textarea class="form-control form-control-lg" id="query_text" name="query_text" rows="4" 
+                                         placeholder="Example: എന്റെ തെങ്ങിൻ ചെടിയിൽ ഇലകൾ മഞ്ഞളായി മാറുന്നു. എന്താണ് കാരണം? / My coconut plant leaves are turning yellow. What's the reason?" 
+                                         required></textarea>
+                                <small class="form-text text-muted">
+                                    <i class="fas fa-language me-1"></i>You can type in Malayalam or English
+                                </small>
+                            </div>
+
+                            <!-- Language Selection -->
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label text-dark">
+                                        <i class="fas fa-language me-2"></i>Response Language
+                                    </label>
+                                    <select class="form-select" name="language">
+                                        <option value="ml" {% if current_user.preferred_language == 'ml' %}selected{% endif %}>മലയാളം (Malayalam)</option>
+                                        <option value="en" {% if current_user.preferred_language == 'en' %}selected{% endif %}>English</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label class="form-label text-dark">
+                                        <i class="fas fa-flag me-2"></i>Urgency Level
+                                    </label>
+                                    <select class="form-select" name="urgency">
+                                        <option value="low">Low - General inquiry</option>
+                                        <option value="medium" selected>Medium - Normal farming question</option>
+                                        <option value="high">High - Affecting crop growth</option>
+                                        <option value="urgent">Urgent - Immediate attention needed</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Crop Information -->
+                            <div class="mb-4">
+                                <label for="crop_type" class="form-label text-dark">
+                                    <i class="fas fa-seedling me-2"></i>Crop Type (Optional)
+                                </label>
+                                <select class="form-select" id="crop_type" name="crop_type">
+                                    <option value="">Select crop type</option>
+                                    <option value="Rice">Rice (നെല്ല്)</option>
+                                    <option value="Coconut">Coconut (തെങ്ങ്)</option>
+                                    <option value="Pepper">Pepper (കുരുമുളക്)</option>
+                                    <option value="Cardamom">Cardamom (ഏലം)</option>
+                                    <option value="Rubber">Rubber (റബ്ബർ)</option>
+                                    <option value="Tea">Tea (ചായ)</option>
+                                    <option value="Coffee">Coffee (കാപ്പി)</option>
+                                    <option value="Banana">Banana (വാഴ)</option>
+                                    <option value="Plantain">Plantain (നേന്ത്രം)</option>
+                                    <option value="Ginger">Ginger (ഇഞ്ചി)</option>
+                                    <option value="Turmeric">Turmeric (മഞ്ഞൾ)</option>
+                                    <option value="Vegetables">Vegetables (പച്ചക്കറി)</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+
+                            <!-- File Uploads -->
+                            <!-- Image Upload Section -->
+                            <div id="image_upload_section" class="mb-4 d-none">
+                                <label class="form-label text-dark">
+                                    <i class="fas fa-image me-2"></i>Upload Crop Photo
+                                </label>
+                                <div class="file-upload-area" id="image_upload_area">
+                                    <i class="fas fa-cloud-upload-alt fa-3x text-success mb-3"></i>
+                                    <h5 class="text-dark">Upload Crop Image</h5>
+                                    <p class="text-muted mb-0">Drag & drop or click to select image (JPG, PNG, GIF)</p>
+                                    <input type="file" name="image_file" id="image_file" accept="image/*" class="d-none">
+                                </div>
+                            </div>
+
+                            <!-- Voice Upload Section -->
+                            <div id="voice_upload_section" class="mb-4 d-none">
+                                <label class="form-label text-dark">
+                                    <i class="fas fa-microphone me-2"></i>Record or Upload Audio
+                                </label>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <button type="button" class="btn btn-outline-success w-100 py-3" id="record_button">
+                                            <i class="fas fa-microphone fa-2x mb-2 d-block"></i>
+                                            <span>Record Voice</span>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="file-upload-area" style="min-height: 120px;">
+                                            <i class="fas fa-upload fa-2x text-success mb-2"></i>
+                                            <p class="text-muted mb-0">Upload Audio File</p>
+                                            <input type="file" name="audio_file" id="audio_file" accept="audio/*" class="d-none">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-success btn-lg px-5">
+                                    <i class="fas fa-paper-plane me-2"></i>Submit Query
+                                </button>
+                                <button type="reset" class="btn btn-outline-secondary btn-lg px-5 ms-3">
+                                    <i class="fas fa-redo me-2"></i>Clear Form
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Help Section -->
+                <div class="card border-0 shadow-sm mt-4">
+                    <div class="card-body">
+                        <h5 class="text-success mb-3">
+                            <i class="fas fa-lightbulb me-2"></i>Tips for Better Responses
+                        </h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="d-flex">
+                                    <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                                    <span class="text-dark">Be specific about your problem</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex">
+                                    <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                                    <span class="text-dark">Mention your location (district)</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex">
+                                    <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                                    <span class="text-dark">Include crop type and stage</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex">
+                                    <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                                    <span class="text-dark">Upload clear photos if needed</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle query type changes
+    const queryTypeRadios = document.querySelectorAll('input[name="query_type"]');
+    const imageSection = document.getElementById('image_upload_section');
+    const voiceSection = document.getElementById('voice_upload_section');
+    
+    queryTypeRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            // Hide all sections
+            imageSection.classList.add('d-none');
+            voiceSection.classList.add('d-none');
+            
+            // Show relevant section
+            if (this.value === 'image') {
+                imageSection.classList.remove('d-none');
+            } else if (this.value === 'voice') {
+                voiceSection.classList.remove('d-none');
+            }
+        });
+    });
+    
+    // File upload handling
+    const imageUploadArea = document.getElementById('image_upload_area');
+    const imageFileInput = document.getElementById('image_file');
+    
+    if (imageUploadArea && imageFileInput) {
+        imageUploadArea.addEventListener('click', () => imageFileInput.click());
+        
+        imageFileInput.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                const fileName = this.files[0].name;
+                imageUploadArea.innerHTML = `
+                    <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                    <h5 class="text-success">Image Selected</h5>
+                    <p class="text-muted mb-0">${fileName}</p>
+                `;
+            }
+        });
+    }
+    
+    // Voice recording (placeholder)
+    const recordButton = document.getElementById('record_button');
+    if (recordButton) {
+        recordButton.addEventListener('click', function() {
+            alert('Voice recording feature will be implemented with ML integration. For now, please type your question or upload an audio file.');
+        });
+    }
+    
+    // Form submission
+    document.getElementById('queryForm').addEventListener('submit', function(e) {
+        const queryText = document.getElementById('query_text').value.trim();
+        if (!queryText) {
+            e.preventDefault();
+            alert('Please enter your query text.');
+            return false;
+        }
+        
+        // Show loading state
+        const submitButton = this.querySelector('button[type="submit"]');
+        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Submitting...';
+        submitButton.disabled = true;
+    });
+});
+</script>
+{% endblock %}
