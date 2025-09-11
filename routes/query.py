@@ -105,7 +105,7 @@ def ask_query():
                     ptime = ai.get('processing_time') or None
                     escalated = ai.get('escalated') or False
                 except Exception as ex:
-                    ai_text = 'AI service unavailable. Showing fallback advisory.'
+                    ai_text = 'AI service unavailable. Showing fallback advisory.' if language != 'ml' else 'AI സേവനം ലഭ്യമല്ല. താൽക്കാലിക നിർദ്ദേശം പ്രദർശിപ്പിക്കുന്നു.'
                     model_used = 'fallback'
                     conf = 0.3
                     ptime = 0.0
@@ -122,25 +122,33 @@ def ask_query():
                     if data.get('status') == 'success':
                         label = data.get('disease_detected') or 'Unknown'
                         score = data.get('confidence') or 0.0
-                        ai_text = f"Image analysis suggests: {label} (confidence {score:.2f})."
+                        ai_text = (
+                            f"ചിത്ര വിശകലനം സൂചിപ്പിക്കുന്നത്: {label} (വിശ്വാസം {score:.2f})." if language == 'ml' 
+                            else f"Image analysis suggests: {label} (confidence {score:.2f})."
+                        )
                         model_used = 'huggingface'
                         conf = score
                         ptime = None
                         escalated = False
                     elif data.get('status') == 'loading':
-                        ai_text = data.get('message', 'Model is loading, please retry shortly.')
+                        ai_text = data.get('message') or (
+                            'മോഡൽ ലോഡാകുന്നു, ദയവായി കുറച്ച് നേരം കഴിഞ്ഞ് വീണ്ടും ശ്രമിക്കുക.' if language == 'ml' 
+                            else 'Model is loading, please retry shortly.'
+                        )
                         model_used = 'huggingface'
                         conf = 0.0
                         ptime = None
                         escalated = False
                     else:
-                        ai_text = data.get('message') or 'Image analysis unavailable.'
+                        ai_text = data.get('message') or (
+                            'ചിത്ര വിശകലനം ലഭ്യമല്ല.' if language == 'ml' else 'Image analysis unavailable.'
+                        )
                         model_used = 'huggingface'
                         conf = 0.0
                         ptime = None
                         escalated = False
                 except Exception as ex:
-                    ai_text = 'AI image service unavailable. Showing fallback advisory.'
+                    ai_text = 'AI image service unavailable. Showing fallback advisory.' if language != 'ml' else 'AI ചിത്രം സർവീസ് ലഭ്യമല്ല. താൽക്കാലിക നിർദ്ദേശം പ്രദർശിപ്പിക്കുന്നു.'
                     model_used = 'fallback'
                     conf = 0.3
                     ptime = 0.0

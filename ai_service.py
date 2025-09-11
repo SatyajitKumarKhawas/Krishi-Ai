@@ -109,7 +109,7 @@ def load_seed_knowledge() -> List[Document]:
 def build_prompt(req: AnswerRequest, contexts: List[Document]) -> str:
     sys_msg = (
         "You are Kerala Krishi AI, a helpful, reliable agricultural advisor. "
-        "Answer in Malayalam if language=ml, otherwise English. Be concise, step-wise, and safe."
+        "Be concise, step-wise, and safe."
     )
     ctx = "\n\n".join([f"[Context {i+1}] {d.text}" for i, d in enumerate(contexts)])
     user_ctx = []
@@ -124,11 +124,16 @@ def build_prompt(req: AnswerRequest, contexts: List[Document]) -> str:
     if req.audio_path:
         user_ctx.append(f"Audio provided: {req.audio_path}")
     user_ctx_str = " | ".join(user_ctx)
+    lang_rule = (
+        "RESPONSE LANGUAGE: Respond STRICTLY in Malayalam. Do NOT use English words except crop/chemical names if unavoidable."
+        if req.language == "ml" else
+        "RESPONSE LANGUAGE: Respond in English."
+    )
     return (
-        f"{sys_msg}\n\nKnowledge:\n{ctx}\n\n"
+        f"{sys_msg}\n{lang_rule}\n\nKnowledge:\n{ctx}\n\n"
         f"UserContext: {user_ctx_str}\n\n"
         f"Question: {req.query_text}\n\n"
-        "Provide: 1) Direct answer, 2) Steps, 3) Safety, 4) If unclear, what info is needed."
+        "Provide clearly labeled sections: 1) Direct Answer, 2) Steps, 3) Safety, 4) Unclear Information."
     )
 
 

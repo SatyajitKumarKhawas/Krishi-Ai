@@ -37,6 +37,9 @@ def create_user_model(db):
         # Language Preference
         preferred_language = db.Column(db.String(5), default='ml', nullable=False)  # ml = Malayalam, en = English
         
+        # Notification Preferences
+        notification_preferences = db.Column(db.Text, nullable=True)  # JSON string of notification settings
+        
         # Account Status
         is_active = db.Column(db.Boolean, default=True, nullable=False)
         is_verified = db.Column(db.Boolean, default=False, nullable=False)
@@ -106,6 +109,7 @@ def create_user_model(db):
                 'farming_experience': self.farming_experience,
                 'farm_type': self.farm_type,
                 'preferred_language': self.preferred_language,
+                'notification_preferences': self.notification_preferences,
                 'is_active': self.is_active,
                 'is_verified': self.is_verified,
                 'created_at': self.created_at.isoformat() if self.created_at else None,

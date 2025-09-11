@@ -62,7 +62,7 @@
                                         
                                         <div class="text-muted">
                                             <i class="fas fa-calendar me-1"></i>
-                                            <strong>Asked:</strong> {{ query.created_at.strftime('%d %b %Y at %I:%M %p') }}
+                                            <strong>Asked:</strong> {{ query.created_at|format_dt_local('%d %b %Y at %I:%M %p') }}
                                             {% if query.location %}
                                             <br><i class="fas fa-map-marker-alt me-1"></i>
                                             <strong>Location:</strong> {{ query.location }}

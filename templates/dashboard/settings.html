@@ -61,7 +61,8 @@
                         <form method="POST" action="{{ url_for('dashboard.update_notifications') }}">
                             <div class="mb-3">
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="email_notifications" name="email_notifications" checked>
+                                    <input class="form-check-input" type="checkbox" id="email_notifications" name="email_notifications" 
+                                           {% if notification_prefs.get('email_notifications', True) %}checked{% endif %}>
                                     <label class="form-check-label text-dark" for="email_notifications">
                                         Email Notifications
                                     </label>
@@ -71,7 +72,8 @@
                             
                             <div class="mb-3">
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="sms_notifications" name="sms_notifications" checked>
+                                    <input class="form-check-input" type="checkbox" id="sms_notifications" name="sms_notifications" 
+                                           {% if notification_prefs.get('sms_notifications', True) %}checked{% endif %}>
                                     <label class="form-check-label text-dark" for="sms_notifications">
                                         SMS Notifications
                                     </label>
@@ -81,7 +83,8 @@
                             
                             <div class="mb-3">
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="weather_alerts" name="weather_alerts" checked>
+                                    <input class="form-check-input" type="checkbox" id="weather_alerts" name="weather_alerts" 
+                                           {% if notification_prefs.get('weather_alerts', True) %}checked{% endif %}>
                                     <label class="form-check-label text-dark" for="weather_alerts">
                                         Weather Alerts
                                     </label>

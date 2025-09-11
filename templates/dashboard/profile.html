@@ -2,6 +2,15 @@
 
 {% block title %}My Profile - Kerala Krishi AI{% endblock %}
 
+{% block head %}
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+{% if cache_buster %}
+<meta name="cache-buster" content="{{ cache_buster }}">
+{% endif %}
+{% endblock %}
+
 {% block content %}
 <section class="dashboard-section py-5 mt-5">
     <div class="container">
@@ -22,9 +31,14 @@
                             {% endif %}
                         </p>
                     </div>
-                    <a href="{{ url_for('dashboard.edit_profile') }}" class="btn btn-success">
-                        <i class="fas fa-edit me-2"></i>Edit Profile
-                    </a>
+                    <div class="btn-group">
+                        <a href="{{ url_for('dashboard.edit_profile') }}" class="btn btn-success">
+                            <i class="fas fa-edit me-2"></i>Edit Profile
+                        </a>
+                        <button onclick="refreshProfileData()" class="btn btn-outline-success">
+                            <i class="fas fa-sync-alt me-2"></i>Refresh
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -229,4 +243,28 @@
         </div>
     </div>
 </section>
+
+<script>
+function refreshProfileData() {
+    // Force reload the page with cache busting
+    const timestamp = new Date().getTime();
+    window.location.href = window.location.href.split('?')[0] + '?t=' + timestamp;
+}
+
+// Auto-refresh every 30 seconds if there's a cache buster
+{% if cache_buster %}
+setTimeout(function() {
+    console.log('Auto-refreshing profile data...');
+    refreshProfileData();
+}, 30000);
+{% endif %}
+
+// Debug: Log current user data
+console.log('Profile page loaded with user data:');
+console.log('Email:', '{{ user.email or "Not provided" }}');
+console.log('Age:', '{{ user.age or "Not provided" }}');
+console.log('District:', '{{ user.district or "Not provided" }}');
+console.log('Farm Size:', '{{ user.farm_size or "Not provided" }}');
+console.log('Profile Completion:', '{{ user.get_profile_completion() }}%');
+</script>
 {% endblock %}

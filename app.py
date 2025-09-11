@@ -4,7 +4,13 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from flask_migrate import Migrate
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
-from datetime import datetime
+from datetime import datetime, timezone
+import re
+from markupsafe import Markup
+try:
+    from zoneinfo import ZoneInfo
+except Exception:
+    ZoneInfo = None
 import os
 from config import config
 
@@ -84,6 +90,103 @@ def inject_models():
         'FarmerQuery': FarmerQuery,
         'QueryResponse': QueryResponse
     }
+
+# Jinja filters
+def format_dt_local(dt, fmt='%d %b %Y at %I:%M %p'):
+    """Format UTC datetime to Asia/Kolkata local time for display."""
+    if not dt:
+        return ''
+    try:
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        if ZoneInfo is not None:
+            dt_local = dt.astimezone(ZoneInfo('Asia/Kolkata'))
+        else:
+            # Fallback: IST is UTC+5:30 (no DST); approximate if zoneinfo unavailable
+            dt_local = dt.astimezone()
+        return dt_local.strftime(fmt)
+    except Exception:
+        return dt.strftime(fmt)
+
+app.jinja_env.filters['format_dt_local'] = format_dt_local
+
+def format_ai_response(text: str) -> Markup:
+    """Convert AI response markdown-ish text to clean HTML for readability.
+
+    - Remove stray ** markers
+    - Bold section titles like "1) Direct Answer:" or "Safety:"
+    - Convert bullet points (*, -) to <ul><li>
+    - Convert ordered points (1., 2.) to <ol><li>
+    - Preserve paragraphs
+    """
+    if not text:
+        return Markup("")
+
+    # Normalize newlines and strip asterisks used for emphasis
+    cleaned = text.replace("**", "").replace("\r\n", "\n").replace("\r", "\n")
+    lines = cleaned.split("\n")
+
+    html_parts = []
+    in_ul = False
+    in_ol = False
+
+    def close_lists():
+        nonlocal in_ul, in_ol
+        if in_ul:
+            html_parts.append("</ul>")
+            in_ul = False
+        if in_ol:
+            html_parts.append("</ol>")
+            in_ol = False
+
+    section_re = re.compile(r"^\s*(?:\d+\)\s*)?([^:]{3,}?):\s*$")
+    bullet_re = re.compile(r"^\s*([*-])\s+(.*)$")
+    ordered_re = re.compile(r"^\s*(\d+)\.\s+(.*)$")
+
+    for raw in lines:
+        line = raw.strip()
+        if not line:
+            close_lists()
+            html_parts.append("<br>")
+            continue
+
+        m_sec = section_re.match(line)
+        if m_sec:
+            close_lists()
+            title = m_sec.group(1).strip()
+            # Replace "Direct Answer" with just "Answer"
+            if re.match(r"^direct\s+answer$", title, flags=re.IGNORECASE):
+                title = "Answer"
+            html_parts.append(f"<div class=\"ai-section-title\"><strong>{title}:</strong></div>")
+            continue
+
+        m_b = bullet_re.match(line)
+        if m_b:
+            if not in_ul:
+                close_lists()
+                html_parts.append("<ul class=\"ai-list\">")
+                in_ul = True
+            html_parts.append(f"<li>{m_b.group(2).strip()}</li>")
+            continue
+
+        m_o = ordered_re.match(line)
+        if m_o:
+            if not in_ol:
+                close_lists()
+                html_parts.append("<ol class=\"ai-olist\">")
+                in_ol = True
+            html_parts.append(f"<li>{m_o.group(2).strip()}</li>")
+            continue
+
+        # Regular paragraph line
+        close_lists()
+        html_parts.append(f"<span class=\"ai-line\">{line}</span>")
+
+    close_lists()
+    html = "\n".join(html_parts)
+    return Markup(html)
+
+app.jinja_env.filters['format_ai_response'] = format_ai_response
 
 # Import and register routes AFTER creating models
 from routes.auth import auth_bp
