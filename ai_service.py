@@ -151,7 +151,7 @@ def call_gemini(prompt: str, language: str) -> str:
         )
     try:
         genai.configure(api_key=api_key)
-        for model_name in ["gemini-pro-2.0", "gemini-1.5-pro", "gemini-1.5-flash"]:
+        for model_name in ["gemini-1.5-flash"]:
             try:
                 model = genai.GenerativeModel(model_name)
                 resp = model.generate_content(prompt)
