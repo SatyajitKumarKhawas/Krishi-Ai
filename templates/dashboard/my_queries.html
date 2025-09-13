@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block title %}My Queries - Kerala Krishi AI{% endblock %}
+
+{% block content %}
+<section class="dashboard-section py-5 mt-5">
+    <div class="container">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h2 class="text-success mb-1">
+                            <i class="fas fa-list me-2"></i>My Queries
+                        </h2>
+                        <p class="text-muted mb-0">View all your farming questions and responses</p>
+                    </div>
+                    <a href="{{ url_for('query.ask_query') }}" class="btn btn-success">
+                        <i class="fas fa-plus me-2"></i>Ask New Query
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Queries List -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        {% if queries.items %}
+                            {% for query in queries.items %}
+                            <div class="query-item border-bottom pb-4 mb-4">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <h5 class="text-dark mb-2">{{ query.query_text[:150] }}{% if query.query_text|length > 150 %}...{% endif %}</h5>
+                                        
+                                        <div class="d-flex gap-2 mb-3">
+                                            <span class="badge bg-{{ 'success' if query.status == 'answered' else 'warning' if query.status == 'pending' else 'info' }}">
+                                                <i class="fas fa-{{ 'check' if query.status == 'answered' else 'clock' if query.status == 'pending' else 'info-circle' }} me-1"></i>
+                                                {{ query.status.title() }}
+                                            </span>
+                                            
+                                            {% if query.crop_type %}
+                                            <span class="badge bg-secondary">
+                                                <i class="fas fa-seedling me-1"></i>{{ query.crop_type }}
+                                            </span>
+                                            {% endif %}
+                                            
+                                            <span class="badge bg-primary">
+                                                <i class="fas fa-{{ 'microphone' if query.query_type == 'voice' else 'camera' if query.query_type == 'image' else 'keyboard' }} me-1"></i>
+                                                {{ query.query_type.title() }}
+                                            </span>
+                                            
+                                            <span class="badge bg-info">
+                                                <i class="fas fa-flag me-1"></i>{{ query.urgency.title() }}
+                                            </span>
+                                            
+                                            <span class="badge bg-dark">
+                                                <i class="fas fa-language me-1"></i>{{ 'Malayalam' if query.language == 'ml' else 'English' }}
+                                            </span>
+                                        </div>
+                                        
+                                        <div class="text-muted">
+                                            <i class="fas fa-calendar me-1"></i>
+                                            <strong>Asked:</strong> {{ query.created_at|format_dt_local('%d %b %Y at %I:%M %p') }}
+                                            {% if query.location %}
+                                            <br><i class="fas fa-map-marker-alt me-1"></i>
+                                            <strong>Location:</strong> {{ query.location }}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-4 text-end">
+                                        <div class="mb-2">
+                                            {% if query.responses %}
+                                                <span class="text-success">
+                                                    <i class="fas fa-reply me-1"></i>{{ query.responses|length }} Response(s)
+                                                </span>
+                                            {% else %}
+                                                <span class="text-muted">
+                                                    <i class="fas fa-hourglass-half me-1"></i>Awaiting Response
+                                                </span>
+                                            {% endif %}
+                                        </div>
+                                        
+                                        <a href="{{ url_for('dashboard.view_query', query_id=query.id) }}" class="btn btn-outline-success btn-sm">
+                                            <i class="fas fa-eye me-1"></i>View Details
+                                        </a>
+                                        
+                                        {% if query.image_path %}
+                                        <br><small class="text-muted mt-1">
+                                            <i class="fas fa-image me-1"></i>Has Image
+                                        </small>
+                                        {% endif %}
+                                        
+                                        {% if query.audio_path %}
+                                        <br><small class="text-muted">
+                                            <i class="fas fa-volume-up me-1"></i>Has Audio
+                                        </small>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            
+                            <!-- Pagination -->
+                            {% if queries.pages > 1 %}
+                            <nav aria-label="Query pagination">
+                                <ul class="pagination justify-content-center">
+                                    {% if queries.has_prev %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ url_for('dashboard.my_queries', page=queries.prev_num) }}">
+                                            <i class="fas fa-chevron-left"></i>
+                                        </a>
+                                    </li>
+                                    {% endif %}
+                                    
+                                    {% for page_num in queries.iter_pages() %}
+                                        {% if page_num %}
+                                            {% if page_num != queries.page %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="{{ url_for('dashboard.my_queries', page=page_num) }}">{{ page_num }}</a>
+                                            </li>
+                                            {% else %}
+                                            <li class="page-item active">
+                                                <span class="page-link">{{ page_num }}</span>
+                                            </li>
+                                            {% endif %}
+                                        {% else %}
+                                        <li class="page-item disabled">
+                                            <span class="page-link">...</span>
+                                        </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                    
+                                    {% if queries.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ url_for('dashboard.my_queries', page=queries.next_num) }}">
+                                            <i class="fas fa-chevron-right"></i>
+                                        </a>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                            {% endif %}
+                            
+                        {% else %}
+                            <!-- No Queries State -->
+                            <div class="text-center py-5">
+                                <i class="fas fa-question-circle fa-4x text-muted mb-4"></i>
+                                <h3 class="text-muted mb-3">No Queries Yet</h3>
+                                <p class="text-muted mb-4">
+                                    You haven't asked any farming questions yet. Start by asking your first question 
+                                    to get AI-powered agricultural advice!
+                                </p>
+                                <a href="{{ url_for('query.ask_query') }}" class="btn btn-success btn-lg">
+                                    <i class="fas fa-plus me-2"></i>Ask Your First Query
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

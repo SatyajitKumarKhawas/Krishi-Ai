@@ -1,0 +1,290 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Profile - Kerala Krishi AI{% endblock %}
+
+{% block content %}
+<section class="dashboard-section py-5 mt-5">
+    <div class="container">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h2 class="text-success mb-1">
+                            <i class="fas fa-user-edit me-2"></i>Edit Profile
+                        </h2>
+                        <p class="text-muted mb-0">Update your personal and farming information</p>
+                    </div>
+                    <a href="{{ url_for('dashboard.profile') }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <form method="POST" action="{{ url_for('dashboard.edit_profile') }}">
+            <div class="row g-4">
+                <!-- Personal Information -->
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-user me-2"></i>Personal Information
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="full_name" class="form-label text-dark">Full Name *</label>
+                                    <input type="text" class="form-control" id="full_name" name="full_name" 
+                                           value="{{ user.full_name }}" required>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="username" class="form-label text-dark">Username *</label>
+                                    <input type="text" class="form-control" id="username" name="username" 
+                                           value="{{ user.username }}" required>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="phone" class="form-label text-dark">Phone Number *</label>
+                                    <input type="tel" class="form-control" id="phone" name="phone" 
+                                           value="{{ user.phone }}" required>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label text-dark">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" 
+                                           value="{{ user.email or '' }}">
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="age" class="form-label text-dark">Age</label>
+                                    <input type="number" class="form-control" id="age" name="age" 
+                                           value="{{ user.age or '' }}" min="18" max="100">
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="gender" class="form-label text-dark">Gender</label>
+                                    <select class="form-select" id="gender" name="gender">
+                                        <option value="">Select Gender</option>
+                                        <option value="male" {% if user.gender == 'male' %}selected{% endif %}>Male</option>
+                                        <option value="female" {% if user.gender == 'female' %}selected{% endif %}>Female</option>
+                                        <option value="other" {% if user.gender == 'other' %}selected{% endif %}>Other</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-12">
+                                    <label for="preferred_language" class="form-label text-dark">Preferred Language</label>
+                                    <select class="form-select" id="preferred_language" name="preferred_language">
+                                        <option value="ml" {% if user.preferred_language == 'ml' %}selected{% endif %}>മലയാളം (Malayalam)</option>
+                                        <option value="en" {% if user.preferred_language == 'en' %}selected{% endif %}>English</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Location Information -->
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-map-marker-alt me-2"></i>Location Information
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="district" class="form-label text-dark">District</label>
+                                    <input type="text" class="form-control" id="district" name="district" 
+                                           value="{{ user.district or '' }}" placeholder="e.g., Ernakulam">
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="block" class="form-label text-dark">Block</label>
+                                    <input type="text" class="form-control" id="block" name="block" 
+                                           value="{{ user.block or '' }}" placeholder="e.g., Paravur">
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="village" class="form-label text-dark">Village</label>
+                                    <input type="text" class="form-control" id="village" name="village" 
+                                           value="{{ user.village or '' }}" placeholder="e.g., Chendamangalam">
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="pin_code" class="form-label text-dark">PIN Code</label>
+                                    <input type="text" class="form-control" id="pin_code" name="pin_code" 
+                                           value="{{ user.pin_code or '' }}" placeholder="e.g., 683512">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4 mt-1">
+                <!-- Farming Information -->
+                <div class="col-lg-8">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-seedling me-2"></i>Farming Information
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="farm_size" class="form-label text-dark">Farm Size (acres)</label>
+                                    <input type="number" class="form-control" id="farm_size" name="farm_size" 
+                                           value="{{ user.farm_size or '' }}" step="0.1" min="0" placeholder="e.g., 2.5">
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="farming_experience" class="form-label text-dark">Farming Experience (years)</label>
+                                    <input type="number" class="form-control" id="farming_experience" name="farming_experience" 
+                                           value="{{ user.farming_experience or '' }}" min="0" max="100" placeholder="e.g., 10">
+                                </div>
+                                
+                                <div class="col-12">
+                                    <label for="farm_type" class="form-label text-dark">Farm Type</label>
+                                    <select class="form-select" id="farm_type" name="farm_type">
+                                        <option value="">Select Farm Type</option>
+                                        <option value="organic" {% if user.farm_type == 'organic' %}selected{% endif %}>Organic Farming</option>
+                                        <option value="conventional" {% if user.farm_type == 'conventional' %}selected{% endif %}>Conventional Farming</option>
+                                        <option value="mixed" {% if user.farm_type == 'mixed' %}selected{% endif %}>Mixed Farming</option>
+                                        <option value="horticulture" {% if user.farm_type == 'horticulture' %}selected{% endif %}>Horticulture</option>
+                                        <option value="livestock" {% if user.farm_type == 'livestock' %}selected{% endif %}>Livestock Farming</option>
+                                        <option value="poultry" {% if user.farm_type == 'poultry' %}selected{% endif %}>Poultry Farming</option>
+                                        <option value="dairy" {% if user.farm_type == 'dairy' %}selected{% endif %}>Dairy Farming</option>
+                                        <option value="other" {% if user.farm_type == 'other' %}selected{% endif %}>Other</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-12">
+                                    <label class="form-label text-dark">Primary Crops</label>
+                                    <div class="row g-2">
+                                        {% set crop_options = ['Rice', 'Coconut', 'Rubber', 'Spices', 'Vegetables', 'Fruits', 'Tea', 'Coffee', 'Cashew', 'Banana', 'Tapioca', 'Sugarcane', 'Cotton', 'Other'] %}
+                                        {% for crop in crop_options %}
+                                        <div class="col-md-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="primary_crops" 
+                                                       value="{{ crop }}" id="crop_{{ loop.index }}"
+                                                       {% if crop in primary_crops %}checked{% endif %}>
+                                                <label class="form-check-label text-dark" for="crop_{{ loop.index }}">
+                                                    {{ crop }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Completion -->
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-chart-pie me-2"></i>Profile Completion
+                            </h5>
+                        </div>
+                        <div class="card-body text-center">
+                            <div class="mb-3">
+                                <div class="progress" style="height: 25px;">
+                                    <div class="progress-bar bg-success" role="progressbar" 
+                                         style="width: {{ user.get_profile_completion() }}%" 
+                                         aria-valuenow="{{ user.get_profile_completion() }}" 
+                                         aria-valuemin="0" aria-valuemax="100">
+                                        {{ user.get_profile_completion() }}%
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-muted small">
+                                Complete your profile to get better AI recommendations and personalized farming advice.
+                            </p>
+                            
+                            <div class="d-grid gap-2 mt-3">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-save me-2"></i>Save Changes
+                                </button>
+                                
+                                <a href="{{ url_for('dashboard.profile') }}" class="btn btn-outline-secondary">
+                                    <i class="fas fa-times me-2"></i>Cancel
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Form validation
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    const requiredFields = form.querySelectorAll('[required]');
+    
+    // Real-time validation
+    requiredFields.forEach(field => {
+        field.addEventListener('blur', function() {
+            if (!this.value.trim()) {
+                this.classList.add('is-invalid');
+            } else {
+                this.classList.remove('is-invalid');
+            }
+        });
+    });
+    
+    // Form submission validation
+    form.addEventListener('submit', function(e) {
+        let isValid = true;
+        
+        requiredFields.forEach(field => {
+            if (!field.value.trim()) {
+                field.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                field.classList.remove('is-invalid');
+            }
+        });
+        
+        if (!isValid) {
+            e.preventDefault();
+            alert('Please fill in all required fields.');
+        }
+    });
+    
+    // Phone number validation
+    const phoneField = document.getElementById('phone');
+    phoneField.addEventListener('input', function() {
+        const phoneRegex = /^[0-9]{10}$/;
+        if (this.value && !phoneRegex.test(this.value)) {
+            this.classList.add('is-invalid');
+        } else {
+            this.classList.remove('is-invalid');
+        }
+    });
+    
+    // Email validation
+    const emailField = document.getElementById('email');
+    emailField.addEventListener('input', function() {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (this.value && !emailRegex.test(this.value)) {
+            this.classList.add('is-invalid');
+        } else {
+            this.classList.remove('is-invalid');
+        }
+    });
+});
+</script>
+{% endblock %}

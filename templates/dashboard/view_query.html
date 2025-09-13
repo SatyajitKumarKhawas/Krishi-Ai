@@ -1,0 +1,254 @@
+{% extends "base.html" %}
+
+{% block title %}Query Details - Kerala Krishi AI{% endblock %}
+
+{% block content %}
+<section class="dashboard-section py-5 mt-5">
+    <div class="container">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h2 class="text-success mb-1">
+                            <i class="fas fa-question-circle me-2"></i>Query Details
+                        </h2>
+                        <p class="text-muted mb-0">View your query and AI responses</p>
+                    </div>
+                    <a href="{{ url_for('dashboard.my_queries') }}" class="btn btn-outline-success">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Queries
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Query Information -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-info-circle me-2"></i>Your Query
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h4 class="text-dark mb-3">{{ query.query_text }}</h4>
+                                
+                                <div class="d-flex gap-2 mb-3">
+                                    <span class="badge bg-{{ 'success' if query.status == 'answered' else 'warning' if query.status == 'pending' else 'info' }} fs-6">
+                                        <i class="fas fa-{{ 'check' if query.status == 'answered' else 'clock' if query.status == 'pending' else 'info-circle' }} me-1"></i>
+                                        {{ query.status.title() }}
+                                    </span>
+                                    
+                                    {% if query.crop_type %}
+                                    <span class="badge bg-secondary fs-6">
+                                        <i class="fas fa-seedling me-1"></i>{{ query.crop_type }}
+                                    </span>
+                                    {% endif %}
+                                    
+                                    <span class="badge bg-primary fs-6">
+                                        <i class="fas fa-{{ 'microphone' if query.query_type == 'voice' else 'camera' if query.query_type == 'image' else 'keyboard' }} me-1"></i>
+                                        {{ query.query_type.title() }}
+                                    </span>
+                                    
+                                    <span class="badge bg-info fs-6">
+                                        <i class="fas fa-flag me-1"></i>{{ query.urgency.title() }}
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4 text-end">
+                                <p class="text-muted mb-1">
+                                    <i class="fas fa-calendar me-1"></i>
+                                    <strong>Asked:</strong> {{ query.created_at|format_dt_local('%d %b %Y at %I:%M %p') }}
+                                </p>
+                                
+                                {% if query.location %}
+                                <p class="text-muted mb-1">
+                                    <i class="fas fa-map-marker-alt me-1"></i>
+                                    <strong>Location:</strong> {{ query.location }}
+                                </p>
+                                {% endif %}
+                                
+                                <p class="text-muted mb-0">
+                                    <i class="fas fa-language me-1"></i>
+                                    <strong>Language:</strong> {{ 'Malayalam' if query.language == 'ml' else 'English' }}
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Media Files -->
+                        {% if query.image_path or query.audio_path %}
+                        <div class="mt-3 pt-3 border-top">
+                            <h6 class="text-dark mb-2">Attachments:</h6>
+                            {% if query.image_path %}
+                            <div class="mb-2">
+                                <i class="fas fa-image text-success me-2"></i>
+                                <span class="text-dark">Image: {{ query.image_path }}</span>
+                                <a href="{{ url_for('static', filename='uploads/' + query.image_path) }}" target="_blank" class="btn btn-sm btn-outline-success ms-2">
+                                    <i class="fas fa-external-link-alt me-1"></i>View
+                                </a>
+                            </div>
+                            {% endif %}
+                            
+                            {% if query.audio_path %}
+                            <div class="mb-2">
+                                <i class="fas fa-volume-up text-success me-2"></i>
+                                <span class="text-dark">Audio: {{ query.audio_path }}</span>
+                                <audio controls class="ms-2">
+                                    <source src="{{ url_for('static', filename='uploads/' + query.audio_path) }}" type="audio/mpeg">
+                                    Your browser does not support the audio element.
+                                </audio>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Responses -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-reply me-2"></i>Responses ({{ query.responses|length }})
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        {% if query.responses %}
+                            {% for response in query.responses %}
+                            <div class="response-item {% if not loop.last %}border-bottom pb-4 mb-4{% endif %}">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div>
+                                        <span class="badge bg-{{ 'primary' if response.response_type == 'ai' else 'success' if response.response_type == 'human' else 'warning' }}">
+                                            <i class="fas fa-{{ 'robot' if response.response_type == 'ai' else 'user' if response.response_type == 'human' else 'flag' }} me-1"></i>
+                                            {{ 'AI Assistant' if response.response_type == 'ai' else 'Expert Officer' if response.response_type == 'human' else 'Escalated' }}
+                                        </span>
+                                        
+                                        {% if response.confidence_score %}
+                                        <span class="badge bg-secondary ms-2">
+                                            <i class="fas fa-chart-line me-1"></i>
+                                            Confidence: {{ (response.confidence_score * 100)|round }}%
+                                        </span>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <small class="text-muted">
+                                        <i class="fas fa-clock me-1"></i>
+                                        {{ response.created_at|format_dt_local('%d %b %Y at %I:%M %p') }}
+                                    </small>
+                                </div>
+                                
+                                <div class="response-content ai-response">
+                                    {{ response.response_text|format_ai_response|safe }}
+                                </div>
+                                
+                                {% if response.response_type == 'human' and (response.expert_name or response.expert_designation) %}
+                                <div class="expert-info bg-light p-3 rounded mb-3">
+                                    <h6 class="text-dark mb-2">
+                                        <i class="fas fa-user-tie me-2"></i>Expert Information
+                                    </h6>
+                                    {% if response.expert_name %}
+                                    <p class="mb-1 text-dark"><strong>Name:</strong> {{ response.expert_name }}</p>
+                                    {% endif %}
+                                    {% if response.expert_designation %}
+                                    <p class="mb-1 text-dark"><strong>Designation:</strong> {{ response.expert_designation }}</p>
+                                    {% endif %}
+                                    {% if response.expert_contact %}
+                                    <p class="mb-0 text-dark"><strong>Contact:</strong> {{ response.expert_contact }}</p>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                                
+                                <!-- Feedback Section -->
+                                {% if not response.rating %}
+                                <div class="feedback-section bg-light p-3 rounded">
+                                    <h6 class="text-dark mb-3">
+                                        <i class="fas fa-star me-2"></i>Rate this response
+                                    </h6>
+                                    <form method="POST" action="{{ url_for('query.submit_feedback', response_id=response.id) }}">
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label text-dark">Was this helpful?</label>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="is_helpful" id="helpful_yes_{{ response.id }}" value="yes" required>
+                                                    <label class="form-check-label text-dark" for="helpful_yes_{{ response.id }}">
+                                                        <i class="fas fa-thumbs-up me-1"></i>Yes, it was helpful
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="is_helpful" id="helpful_no_{{ response.id }}" value="no" required>
+                                                    <label class="form-check-label text-dark" for="helpful_no_{{ response.id }}">
+                                                        <i class="fas fa-thumbs-down me-1"></i>No, it wasn't helpful
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-6">
+                                                <label class="form-label text-dark">Rating (1-5 stars)</label>
+                                                <select class="form-select" name="rating" required>
+                                                    <option value="">Select rating</option>
+                                                    <option value="1">⭐ 1 Star</option>
+                                                    <option value="2">⭐⭐ 2 Stars</option>
+                                                    <option value="3">⭐⭐⭐ 3 Stars</option>
+                                                    <option value="4">⭐⭐⭐⭐ 4 Stars</option>
+                                                    <option value="5">⭐⭐⭐⭐⭐ 5 Stars</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="col-12">
+                                                <label for="feedback_text_{{ response.id }}" class="form-label text-dark">Additional Comments (Optional)</label>
+                                                <textarea class="form-control" id="feedback_text_{{ response.id }}" name="feedback_text" rows="2" placeholder="Share your thoughts about this response..."></textarea>
+                                            </div>
+                                            
+                                            <div class="col-12">
+                                                <button type="submit" class="btn btn-success">
+                                                    <i class="fas fa-paper-plane me-2"></i>Submit Feedback
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                {% else %}
+                                <div class="feedback-display bg-light p-3 rounded">
+                                    <h6 class="text-dark mb-2">
+                                        <i class="fas fa-check-circle text-success me-2"></i>Your Feedback
+                                    </h6>
+                                    <p class="mb-1 text-dark">
+                                        <strong>Rating:</strong> 
+                                        {% for i in range(response.rating) %}⭐{% endfor %}
+                                        ({{ response.rating }}/5)
+                                    </p>
+                                    <p class="mb-1 text-dark">
+                                        <strong>Helpful:</strong> {{ 'Yes' if response.is_helpful else 'No' }}
+                                    </p>
+                                    {% if response.feedback_text %}
+                                    <p class="mb-0 text-dark">
+                                        <strong>Comments:</strong> {{ response.feedback_text }}
+                                    </p>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="text-center py-4">
+                                <i class="fas fa-hourglass-half fa-3x text-muted mb-3"></i>
+                                <h5 class="text-muted">No responses yet</h5>
+                                <p class="text-muted">
+                                    Your query is being processed. You'll receive an AI response shortly.
+                                </p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

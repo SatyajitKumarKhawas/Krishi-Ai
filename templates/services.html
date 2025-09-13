@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+
+{% block title %}Our Services - Kerala Krishi AI{% endblock %}
+
+{% block content %}
+<section class="services-section py-5 mt-5">
+    <div class="container">
+        <!-- Header -->
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <h2 class="display-4 text-success mb-4">Our Agricultural Services</h2>
+                <p class="lead text-muted">
+                    Comprehensive AI-powered solutions for modern farming
+                </p>
+            </div>
+        </div>
+
+        <!-- Main Services -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="service-card bg-success text-white rounded-4 p-4 h-100">
+                    <div class="service-image mb-3 text-center">
+                        <i class="fas fa-brain fa-4x text-warning"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">AI Query Support</h5>
+                    <p class="mb-4">Get instant answers to your farming questions in Malayalam or English. Our AI understands local farming practices and provides contextual advice.</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-warning me-2"></i>24/7 availability</li>
+                        <li><i class="fas fa-check text-warning me-2"></i>Malayalam language support</li>
+                        <li><i class="fas fa-check text-warning me-2"></i>Context-aware responses</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="service-card bg-success text-white rounded-4 p-4 h-100">
+                    <div class="service-image mb-3 text-center">
+                        <i class="fas fa-camera fa-4x text-warning"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Crop Disease Detection</h5>
+                    <p class="mb-4">Upload photos of your crops to identify diseases, pests, and nutritional deficiencies. Get treatment recommendations instantly.</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-warning me-2"></i>Image-based diagnosis</li>
+                        <li><i class="fas fa-check text-warning me-2"></i>Treatment suggestions</li>
+                        <li><i class="fas fa-check text-warning me-2"></i>Preventive measures</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="service-card bg-success text-white rounded-4 p-4 h-100">
+                    <div class="service-image mb-3 text-center">
+                        <i class="fas fa-users fa-4x text-warning"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Expert Consultation</h5>
+                    <p class="mb-4">Connect with certified agricultural officers and experts when you need human guidance for complex farming issues.</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-warning me-2"></i>Certified experts</li>
+                        <li><i class="fas fa-check text-warning me-2"></i>Local knowledge</li>
+                        <li><i class="fas fa-check text-warning me-2"></i>Follow-up support</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Services -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-seedling fa-2x text-success me-3"></i>
+                            <h5 class="mb-0">Crop Advisory</h5>
+                        </div>
+                        <p class="text-muted mb-3">
+                            Get personalized advice on crop selection, planting schedules, and farming techniques based on your location and soil conditions.
+                        </p>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-leaf text-success me-2"></i>Seasonal crop recommendations</li>
+                            <li><i class="fas fa-leaf text-success me-2"></i>Soil-specific guidance</li>
+                            <li><i class="fas fa-leaf text-success me-2"></i>Market trend insights</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-cloud-rain fa-2x text-success me-3"></i>
+                            <h5 class="mb-0">Weather Integration</h5>
+                        </div>
+                        <p class="text-muted mb-3">
+                            Receive weather-based farming advice, irrigation recommendations, and alerts for extreme weather conditions.
+                        </p>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-thermometer-half text-success me-2"></i>Weather-based recommendations</li>
+                            <li><i class="fas fa-thermometer-half text-success me-2"></i>Irrigation scheduling</li>
+                            <li><i class="fas fa-thermometer-half text-success me-2"></i>Storm alerts</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card bg-light border-0">
+                    <div class="card-body p-5">
+                        <h3 class="text-center text-success mb-4">How Our Services Work</h3>
+                        <div class="row g-4">
+                            <div class="col-md-3 text-center">
+                                <div class="step-number bg-success text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                    <strong>1</strong>
+                                </div>
+                                <h6>Register</h6>
+                                <p class="small text-muted">Create your farmer profile with basic information</p>
+                            </div>
+                            <div class="col-md-3 text-center">
+                                <div class="step-number bg-success text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                    <strong>2</strong>
+                                </div>
+                                <h6>Ask Question</h6>
+                                <p class="small text-muted">Submit your query via text, voice, or image</p>
+                            </div>
+                            <div class="col-md-3 text-center">
+                                <div class="step-number bg-success text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                    <strong>3</strong>
+                                </div>
+                                <h6>Get AI Response</h6>
+                                <p class="small text-muted">Receive instant, personalized advice</p>
+                            </div>
+                            <div class="col-md-3 text-center">
+                                <div class="step-number bg-success text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                    <strong>4</strong>
+                                </div>
+                                <h6>Expert Support</h6>
+                                <p class="small text-muted">Get human expert help when needed</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="row mt-5">
+            <div class="col-12 text-center">
+                <div class="card bg-success text-white border-0">
+                    <div class="card-body py-5">
+                        <h3 class="mb-3">Ready to Get Started?</h3>
+                        <p class="lead mb-4">Join thousands of Kerala farmers using AI-powered agricultural support</p>
+                        {% if not current_user.is_authenticated %}
+                            <a href="{{ url_for('auth.register') }}" class="btn btn-warning btn-lg me-3">
+                                <i class="fas fa-user-plus me-2"></i>Register Now
+                            </a>
+                            <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-lg">
+                                <i class="fas fa-sign-in-alt me-2"></i>Login
+                            </a>
+                        {% else %}
+                            <a href="{{ url_for('query.ask_query') }}" class="btn btn-warning btn-lg">
+                                <i class="fas fa-question-circle me-2"></i>Ask Your First Query
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
